@@ -9,7 +9,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class Camera extends Play {
     private int cameraX, cameraY;
-    private boolean onMoveDown, onMoveUp, onMoveLeft, onMoveRight;
+    private boolean onMove;
     private boolean boundX = false;
     private boolean boundY = false;
 
@@ -17,38 +17,36 @@ public class Camera extends Play {
         super(state);
         this.cameraX = 0;
         this.cameraY = 0;
-        this.onMoveUp = false;
-        this.onMoveDown = false;
-        this.onMoveRight = false;
-        this.onMoveLeft = false;
+        this.onMove = false;
     }
 
     public void update (GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if (this.onMoveUp) this.moveUp();
-        if (this.onMoveDown) this.moveDown();
-        if (this.onMoveRight) this.moveRight();
-        if (this.onMoveLeft) this.moveLeft();
+        this.onMove = false;
     }
-    public void moveUp(){
+    public void moveUp(int speed){
+        this.onMove = true;
         if (!this.boundY)
             if (this.cameraY > 0)
-                this.cameraY--;
+                this.cameraY -= speed;
 
     };
-    public void moveDown(){
+    public void moveDown(int speed){
+        this.onMove = true;
         if (!this.boundY)
-            this.cameraY++;
+            this.cameraY += speed;
     };
-    public void moveLeft(){
+    public void moveLeft(int speed){
+        this.onMove = true;
         if (!this.boundX)
             if (this.cameraX > 0)
-                this.cameraX--;
+                this.cameraX -= speed;
             else
                 this.cameraX = 0;
     };
-    public void moveRight(){
+    public void moveRight(int speed){
+        this.onMove = true;
         if (!this.boundX)
-            this.cameraX++;
+            this.cameraX += speed;
     };
     public int getPositionX () {
         return this.cameraX;
@@ -56,6 +54,7 @@ public class Camera extends Play {
     public int getPositionY () {
         return this.cameraY;
     }
+    public boolean getOnMove() { return this.onMove; }
     public void setPositionX (int val) {
         this.cameraX = val;
     }
@@ -64,8 +63,11 @@ public class Camera extends Play {
     }
     public void setBoundX(boolean val) { this.boundX = val;}
     public void setBoundY(boolean val) { this.boundY = val;}
-    public void setOnMoveDown (boolean val) { this.onMoveDown = val; }
-    public void setOnMoveUp (boolean val) { this.onMoveUp = val; }
-    public void setOnMoveRight (boolean val) { this.onMoveRight = val; }
-    public void setOnMoveLeft (boolean val) { this.onMoveLeft = val; }
+    @Override
+    public String toString() {
+        String camera = "Camera object \n" +
+        "Camera position  x=" + this.getPositionX() + " y=" + this.getPositionY();
+
+        return camera;
+    }
 }
