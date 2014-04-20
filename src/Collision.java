@@ -161,6 +161,7 @@ public class Collision {
         int tileX = (Math.round(object.getX()/mapTile.getWidth()));
         int tileY = (Math.round(object.getY()/mapTile.getHeight()));
 
+        /////////////////////////////////////////////////////////////////////
         int x = 0;
         int y = 0;
 
@@ -209,7 +210,7 @@ public class Collision {
         if (this.map.get(rightCenter) != null) newMap.add(this.map.get(rightCenter));
         if (this.map.get(rightBottom) != null) newMap.add(this.map.get(rightBottom));
 
-
+        ////////////////////////////////////////////////////////////////////////
 
 
         return newMap;
