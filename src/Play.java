@@ -25,8 +25,9 @@ public class Play extends BasicGameState {
     private MouseListener mouse;
     private Collision collision;
     private ArrayList<Entity> entityList; //All entities in the game
+    private Enemy enemy;
     private static Player player; //Main player instance
-    private Map map;
+    private static Map map;
     private static Camera camera;
 
     public Play (int state) {
@@ -62,12 +63,20 @@ public class Play extends BasicGameState {
             this.entityList = new ArrayList();
             //Creating player entity
             this.player = new Player();
+
             this.entityList.add(this.player);
-            Entity enemy = new Entity(180, 200);
+            this.enemy = new Enemy(180, 200);
             this.entityList.add(enemy);
+
+            Enemy enemy2 = new Enemy(180, 400);
+            this.entityList.add(enemy2);
             for (Entity entity : this.entityList)
                 entity.init(gc);
 
+            /***** INTERFACE EX ******/
+            MovableEnemy en = this.enemy;
+            en.moveRight(true);
+            /*************************/
 
         } catch (Exception e) {
             System.out.println("Player creation exception");
@@ -192,6 +201,7 @@ public class Play extends BasicGameState {
 
 
     /******************* Set/Get *******************/
+    public static Map getCurrentMap() { return map; }
     public static Camera getCameraObj() {
         return camera;
     }

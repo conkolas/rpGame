@@ -31,7 +31,7 @@ public class Bullet {
 
             this.bulletImage = new Image("res/bullet.png");
 
-            this.speed = 10f;
+            this.speed = 25f;
 
             this.startPoint = new Vector2f(start);
             this.startPoint.x += 16;
@@ -76,10 +76,11 @@ public class Bullet {
                 this.getBulletCoord().getY() - Camera.getCameraObj().getPositionY());
     }
 
-    public void update () throws SlickException {
+    public void update (int delta) throws SlickException {
         if (!destroy) {
-            float x = this.getBulletCoord().getX() + (this.speed * ((float)Math.cos(this.angle * 3.14/180)));
-            float y = this.getBulletCoord().getY() + (this.speed * ((float)Math.sin(this.angle * 3.14/180)));
+            int speed = (int)((float)this.speed * (float)delta * 0.02f);
+            float x = this.getBulletCoord().getX() + (speed * ((float)Math.cos(this.angle * 3.14/180)));
+            float y = this.getBulletCoord().getY() + (speed * ((float)Math.sin(this.angle * 3.14/180)));
             this.getBulletCoord().set(x, y);
             this.getBulletRec().setX(x);
             this.getBulletRec().setY(y);

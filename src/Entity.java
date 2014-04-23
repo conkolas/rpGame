@@ -25,6 +25,7 @@ public class Entity {
     private int positionX, positionY; //World coordinates
     private int screenX, screenY; //Screen coordinates
     private int entityID; // Unique entity ID
+    private int delta;
 
     //Entity stats
     private int moveSpeed, health, armor, attackDamage;
@@ -56,7 +57,7 @@ public class Entity {
     public Entity () {
         //Setting up default stats
         this.setIsLive(true);
-        this.setMoveSpeed(6);
+        this.setMoveSpeed(10);
         this.setHealth(1000);
         this.setArmor(10);
         this.setAttackDamage(100);
@@ -137,13 +138,15 @@ public class Entity {
     }
 
     public void update (GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+        this.delta = delta;
+
         if (this.getHealth() <= 0)
             this.die();
         this.updateOnScreenPosition();
         this.checkMoveStates(delta);
 
         entityAnimation.get(this.getCurrentAnimation()).update(delta);
-        this.gun.update(this.getCenterPosition(), this.getOnMove(), this.getMoveSpeed());
+        this.gun.update(this.getCenterPosition(), this.getOnMove(), this.getMoveSpeed(), delta);
 
     }
 
@@ -152,25 +155,25 @@ public class Entity {
             if (!this.isAttacking())
                 this.setCurrentAnimation(moveDirection.UP.ordinal());
             this.entityAnimation.get(this.getCurrentAnimation()).start();
-            this.moveUp(delta);
+            this.moveUp();
         }
         if (this.getOnMoveDown()) {
             if (!this.isAttacking())
                 this.setCurrentAnimation(moveDirection.DOWN.ordinal());
             this.entityAnimation.get(this.getCurrentAnimation()).start();
-            this.moveDown(delta);
+            this.moveDown();
         }
         if (this.getOnMoveRight()) {
             if (!this.isAttacking())
                 this.setCurrentAnimation(moveDirection.RIGHT.ordinal());
             this.entityAnimation.get(this.getCurrentAnimation()).start();
-            this.moveRight(delta);
+            this.moveRight();
         }
         if (this.getOnMoveLeft()) {
             if (!this.isAttacking())
                 this.setCurrentAnimation(moveDirection.LEFT.ordinal());
             this.entityAnimation.get(this.getCurrentAnimation()).start();
-            this.moveLeft(delta);
+            this.moveLeft();
         }
         if (!this.getOnMoveUp() && !this.getOnMoveDown() && !this.getOnMoveRight() && !this.getOnMoveLeft()) {
             this.entityAnimation.get(this.getCurrentAnimation()).stop();
@@ -203,11 +206,11 @@ public class Entity {
     }
 
 
-    public int moveUp(int delta){
+    public int moveUp(){
         int mov = 0;
         if (!this.getCollisionDirection(Entity.Direction.UP)) {
             if (this.getPositionY() > 0) {
-                int speed = (int)((float)this.getMoveSpeed() * (float)delta * 0.02f);
+                int speed = (int)((float)this.getMoveSpeed() * (float)this.delta * 0.02f);
                 this.setPositionY(this.getPositionY() - speed);
                 mov = 1;
             }
@@ -216,10 +219,10 @@ public class Entity {
             this.setOnMoveUp(false);
         return mov;
     };
-    public int moveDown(int delta){
+    public int moveDown(){
         int mov = 0;
         if (!this.getCollisionDirection(Entity.Direction.DOWN)) {
-            int speed = (int)((float)this.getMoveSpeed() * (float)delta * 0.02f);
+            int speed = (int)((float)this.getMoveSpeed() * (float)this.delta * 0.02f);
             this.setPositionY(this.getPositionY() + speed);
             mov = 1;
         }
@@ -227,11 +230,11 @@ public class Entity {
             this.setOnMoveDown(false);
         return mov;
     };
-    public int moveLeft(int delta){
+    public int moveLeft(){
         int mov = 0;
         if (!this.getCollisionDirection(Entity.Direction.LEFT)) {
             if (this.getPositionX() > 0) {
-                int speed = (int)((float)this.getMoveSpeed() * (float)delta * 0.02f);
+                int speed = (int)((float)this.getMoveSpeed() * (float)this.delta * 0.02f);
                 this.setPositionX(this.getPositionX() - speed);
                 mov = 1;
             }
@@ -240,10 +243,10 @@ public class Entity {
             this.setOnMoveLeft(false);
         return mov;
     };
-    public int moveRight(int delta){
+    public int moveRight(){
         int mov = 0;
         if (!this.getCollisionDirection(Entity.Direction.RIGHT)) {
-            int speed = (int)((float)this.getMoveSpeed() * (float)delta * 0.02f);
+            int speed = (int)((float)this.getMoveSpeed() * (float)this.delta * 0.02f);
             this.setPositionX(this.getPositionX() + speed);
             mov = 1;
         }
@@ -347,6 +350,7 @@ public class Entity {
     public boolean getOnMove () { return this.onMove; }
 
     public int getID() { return this.entityID; }
+    public int getDelta() { return this.delta; }
     public int getMoveSpeed() { return this.moveSpeed; }
     public int getHealth() { return this.health; }
     public int getArmor() { return this.armor; }

@@ -2,10 +2,13 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TileSet;
 import org.newdawn.slick.tiled.TiledMap;
+import org.newdawn.slick.util.pathfinding.PathFindingContext;
+import org.newdawn.slick.util.pathfinding.TileBasedMap;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,7 +23,7 @@ import java.util.List;
 /**
  * Created by ai on 2/18/14.
  */
-public class Map extends Play{
+public class Map implements TileBasedMap{
 
     private TiledMap tiledMap;
     private List<Rectangle> collisionMap;
@@ -28,7 +31,6 @@ public class Map extends Play{
     private int tileHeight;
 
     public Map(int state) {
-        super(state);
         try {
             this.tiledMap = new TiledMap("res/maps/" + state + ".tmx");
             this.tileWidth = this.tiledMap.getTileWidth();
@@ -94,5 +96,47 @@ public class Map extends Play{
                 "\nTile size" + this.tileWidth + "x" + this.tileHeight;
 
         return map;
+    }
+
+    @Override
+    public int getWidthInTiles() {
+        return this.tiledMap.getWidth();
+    }
+
+    @Override
+    public int getHeightInTiles() {
+        return this.tiledMap.getHeight();
+    }
+
+    @Override
+    public void pathFinderVisited(int i, int i2) {
+
+    }
+
+    @Override
+    public boolean blocked(PathFindingContext pathFindingContext, int i, int i2) {
+        int tileX = (Math.round(i/this.tileWidth));
+        int tileY = (Math.round(i2/this.tileHeight));
+        int coord = (i2 * this.tiledMap.getWidth()) + i;
+        boolean b = false;
+        if (this.collisionMap.get(coord) != null) {
+            b = true;
+        }
+        return b;
+    }
+    public boolean blocked(int i, int i2) {
+        int tileX = Math.round(i/this.tileWidth);
+        int tileY = Math.round(i2/this.tileHeight);
+        int coord = (tileY * this.tiledMap.getWidth()) + tileX;
+        Point mid = new Point(i, i2);
+        boolean b = false;
+        if (this.collisionMap.get(coord) != null)
+                b = true;
+        return b;
+    }
+
+    @Override
+    public float getCost(PathFindingContext pathFindingContext, int i, int i2) {
+        return 0;
     }
 }

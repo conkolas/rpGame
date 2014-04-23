@@ -52,7 +52,7 @@ public class Gun extends Entity {
      * Controls shooting speed
      * Calls bullets update method
      */
-    public void update (Vector2f playerCenterPosition, boolean isMoving, float playerSpeed) throws SlickException {
+    public void update (Vector2f playerCenterPosition, boolean isMoving, float playerSpeed, int delta) throws SlickException {
         //Checking bullets in clip
         //If there is enought bullets, then shoot
         //if not - reload
@@ -81,7 +81,7 @@ public class Gun extends Entity {
         }
 
         for (Bullet bullet : bullets)
-            bullet.update();
+            bullet.update(delta);
 
     }
     public void render (GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {

@@ -13,13 +13,14 @@ import java.util.*;
  */
 public class Collision {
 
-    private List<Rectangle> map;
+    private List<Rectangle> map, pot;
     private int mapWidth, mapHeight, tileWidth, tileHeight;
     private boolean mapCollision;
     private Line top, bottom, left, right;
 
     public Collision(List<Rectangle> _map, int mapWidth, int mapHeight) {
         this.map = new ArrayList<Rectangle>();
+        this.pot = new ArrayList<Rectangle>();
         this.map = _map;
         this.mapCollision = false;
 
@@ -36,7 +37,14 @@ public class Collision {
     }
 
     public void render (GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-
+//        if (!this.pot.isEmpty())
+//            for (Rectangle r : this.pot) {
+//                if (r != null)
+//                g.draw(new Rectangle(
+//                        (float)r.getX() - Camera.getCameraObj().getPositionX(),
+//                        (float)r.getY() - Camera.getCameraObj().getPositionY(),
+//                        r.getWidth(), r.getHeight()));
+//            }
     }
 
     /************* Entities and map collision *************/
@@ -51,7 +59,9 @@ public class Collision {
             //Getting potential collision tiles for check
             List<Rectangle> collisionMap;
             Vector2f object = new Vector2f(entity.getPositionX(), entity.getPositionY());
-            collisionMap = getPotentialCollisionMap(object);
+            if (entity instanceof Player)
+                collisionMap = getPotentialCollisionMap(object);
+            else collisionMap = new LinkedList<Rectangle>();
 
             //Checking for entities collision with map tiles
             for (int i = 0; i < collisionMap.size(); i++) {
@@ -199,16 +209,40 @@ public class Collision {
         int rightBottom = (y * this.mapWidth) + x;
 
 
-        if (this.map.get(centerBottom) != null) newMap.add(this.map.get(centerBottom));
-        if (this.map.get(centerTop) != null) newMap.add(this.map.get(centerTop));
+        if (this.map.get(centerBottom) != null) {
+            this.pot.add(this.map.get(centerBottom));
+            newMap.add(this.map.get(centerBottom));
+        }
+        if (this.map.get(centerTop) != null) {
+            this.pot.add(this.map.get(centerTop));
+            newMap.add(this.map.get(centerTop));
+        }
 
-        if (this.map.get(leftTop) != null) newMap.add(this.map.get(leftTop));
-        if (this.map.get(leftCenter) != null) newMap.add(this.map.get(leftCenter));
-        if (this.map.get(leftBottom) != null) newMap.add(this.map.get(leftBottom));
+        if (this.map.get(leftTop) != null) {
+            this.pot.add(this.map.get(leftTop));
+            newMap.add(this.map.get(leftTop));
+        }
+        if (this.map.get(leftCenter) != null) {
+            this.pot.add(this.map.get(leftCenter));
+            newMap.add(this.map.get(leftCenter));
+        }
+        if (this.map.get(leftBottom) != null) {
+            this.pot.add(this.map.get(leftBottom));
+            newMap.add(this.map.get(leftBottom));
+        }
 
-        if (this.map.get(rightTop) != null) newMap.add(this.map.get(rightTop));
-        if (this.map.get(rightCenter) != null) newMap.add(this.map.get(rightCenter));
-        if (this.map.get(rightBottom) != null) newMap.add(this.map.get(rightBottom));
+        if (this.map.get(rightTop) != null) {
+            this.pot.add(this.map.get(rightTop));
+            newMap.add(this.map.get(rightTop));
+        }
+        if (this.map.get(rightCenter) != null) {
+            this.pot.add(this.map.get(rightCenter));
+            newMap.add(this.map.get(rightCenter));
+        }
+        if (this.map.get(rightBottom) != null) {
+            this.pot.add(this.map.get(rightBottom));
+            newMap.add(this.map.get(rightBottom));
+        }
 
         ////////////////////////////////////////////////////////////////////////
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by ai on 2/19/14.
  */
 
-public class Player extends Entity {
+public class Player extends Entity{
     public enum Direction {DOWN, LEFT, RIGHT, UP}
     private boolean mouseDragged;
 
@@ -23,15 +23,15 @@ public class Player extends Entity {
 
 
     public Player() {
-        this.playerCenter = new Vector2f(0, 0);
     }
 
     @Override
     public void init (GameContainer gc) throws SlickException {
         super.init(gc);
-        super.setPositionX(gc.getWidth() / 2);
+        super.setPositionX(gc.getWidth()/2);
         super.setPositionY(gc.getHeight()/2);
 
+        this.playerCenter = new Vector2f(0, 0);
         this.offsetX = 0;
         this.offsetY = 0;
         this.startOnScreenX = this.onScreenX = gc.getWidth()/2;
@@ -106,11 +106,10 @@ public class Player extends Entity {
 
     /******************* Players moving logic *******************/
     //Overriding Entity class moving methods
-    @Override
-    public int moveUp(int delta){
-        if (super.moveUp(delta) == 1) {
+    public int moveUp(){
+        if (super.moveUp() == 1) {
             //Checking map and camera bounds
-            int speed = (int)((float)super.getMoveSpeed() * (float)delta * 0.02f);
+            int speed = (int)((float)super.getMoveSpeed() * (float)super.getDelta() * 0.02f);
             if ((Camera.getCameraObj().getPositionY() <= 0) && (super.getPositionY() != 0)) {
                 Camera.getCameraObj().setBoundY(true);
                 this.offsetY += speed;
@@ -120,10 +119,9 @@ public class Player extends Entity {
         return 1;
     };
 
-    @Override
-    public int moveDown(int delta){
-        if (super.moveDown(delta) == 1) {
-            int speed = (int)((float)super.getMoveSpeed() * (float)delta * 0.02f);
+    public int moveDown(){
+        if (super.moveDown() == 1) {
+            int speed = (int)((float)super.getMoveSpeed() * (float)super.getDelta() * 0.02f);
             if (this.offsetY > 0)
                 this.offsetY -= speed;
             else
@@ -134,10 +132,9 @@ public class Player extends Entity {
         return 1;
     };
 
-    @Override
-    public int moveLeft(int delta){
-        if (super.moveLeft(delta) == 1) {
-            int speed = (int)((float)super.getMoveSpeed() * (float)delta * 0.02f);
+    public int moveLeft(){
+        if (super.moveLeft() == 1) {
+            int speed = (int)((float)super.getMoveSpeed() * (float)super.getDelta() * 0.02f);
             if ((Camera.getCameraObj().getPositionX() <= 0) && (super.getPositionX() != 0)) {
                 Camera.getCameraObj().setBoundX(true);
                 this.offsetX += speed;
@@ -147,10 +144,9 @@ public class Player extends Entity {
         return 1;
     };
 
-    @Override
-    public int moveRight(int delta){
-        if (super.moveRight(delta) == 1) {
-            int speed = (int)((float)super.getMoveSpeed() * (float)delta * 0.02f);
+    public int moveRight(){
+        if (super.moveRight() == 1) {
+            int speed = (int)((float)super.getMoveSpeed() * (float)super.getDelta() * 0.02f);
             if (this.offsetX > 0)
                 this.offsetX -= speed;
             else
